@@ -1,0 +1,73 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/cache
+.venv/
+venv/
+
+
+# testing
+/coverage
+/test-results
+/playwright-report
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+.env
+.env*
+!.env.example
+secrets.env
+*.env
+.env.example
+# database backups
+backups/
+*.dump
+
+# temporary evaluation files
+README_NEW.md
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# OCR & Model data files
+*.traineddata
+eng.traineddata
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Security Audit
+/audit/findings.json
+/audit/architecture.md
+/audit
+/tests
+disaster_recovery.md 
+/sentry.server.config.ts
+/sentry.edge.config.ts
+/sentry.client.config.ts
+/.github
+*.zip
+/playwright.config.ts
+/scripts
+
