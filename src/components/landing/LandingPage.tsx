@@ -1,78 +1,41 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { LoginPage } from '@/components/auth/LoginPage';
-import { Pill, ArrowRight, Shield, Clock, Calendar, CheckCircle2, Stethoscope, Sparkles } from 'lucide-react';
-import gsap from 'gsap';
-
-// Code-split heavy Three.js canvas so it does not block initial critical path rendering
-const ClinicalCanvas3D = dynamic(
-  () => import('@/components/landing/ClinicalCanvas3D').then((m) => m.ClinicalCanvas3D),
-  {
-    ssr: false,
-    loading: () => <div className="absolute inset-0 bg-slate-950/40 pointer-events-none" />,
-  }
-);
+import {
+  ArrowRight,
+  Play,
+  X,
+  Shield,
+  Zap,
+  Heart,
+  Users,
+  Activity,
+  Check,
+  Calendar,
+  Bell,
+  BarChart3,
+  Camera,
+  FolderLock,
+  ExternalLink,
+} from 'lucide-react';
 
 export function LandingPage() {
   const [showLoginPage, setShowLoginPage] = useState(false);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
-  const card1Ref = useRef<HTMLDivElement>(null);
-  const card2Ref = useRef<HTMLDivElement>(null);
-  const card3Ref = useRef<HTMLDivElement>(null);
-  const card4Ref = useRef<HTMLDivElement>(null);
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [activeInfoModal, setActiveInfoModal] = useState<'privacy' | 'terms' | 'contact' | null>(null);
 
-  // GSAP 3D Floating & Mouse Parallax for Background Prescription Cards
+  // Close modal on Escape key press
   useEffect(() => {
-    // 1. Continuous gentle floating levitation
-    const ctx = gsap.context(() => {
-      gsap.to([card1Ref.current, card3Ref.current], {
-        y: '+=15',
-        rotationZ: '-=2',
-        duration: 4.5,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      });
-
-      gsap.to([card2Ref.current, card4Ref.current], {
-        y: '-=18',
-        rotationZ: '+=2.5',
-        duration: 5.2,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-        delay: 0.5,
-      });
-    });
-
-    // 2. Mouse 3D tilt tracking
-    const handleMouseMove = (e: MouseEvent) => {
-      const { innerWidth, innerHeight } = window;
-      const mouseX = (e.clientX / innerWidth - 0.5) * 2;
-      const mouseY = (e.clientY / innerHeight - 0.5) * 2;
-
-      if (cardsContainerRef.current) {
-        gsap.to(cardsContainerRef.current, {
-          rotationY: mouseX * 8,
-          rotationX: -mouseY * 6,
-          x: mouseX * 20,
-          y: mouseY * 15,
-          duration: 1.2,
-          ease: 'power2.out',
-          transformPerspective: 1200,
-          transformStyle: 'preserve-3d',
-        });
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsVideoModalOpen(false);
+        setActiveInfoModal(null);
       }
     };
-
-    window.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      ctx.revert();
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   if (showLoginPage) {
@@ -80,298 +43,337 @@ export function LandingPage() {
   }
 
   return (
-    <div className="relative min-h-screen w-full bg-gradient-to-br from-[#0B58B6] via-[#1B89E5] to-[#073D7C] overflow-hidden flex flex-col justify-between font-sans selection:bg-[#2098F2] selection:text-white">
-      {/* 1. Ambient Radial Glow Orbs & Three.js 3D Floating Scene */}
-      <ClinicalCanvas3D />
-
-      <div
-        className="absolute -top-[200px] -left-[200px] w-[1300px] h-[1300px] rounded-full pointer-events-none z-0"
-        style={{
-          background: 'radial-gradient(circle, rgba(32, 152, 241, 0.45) 0%, rgba(32, 152, 241, 0.15) 50%, transparent 75%)',
-          filter: 'blur(140px)',
-        }}
-      />
-      <div
-        className="absolute -bottom-[250px] -right-[150px] w-[1000px] h-[1000px] rounded-full pointer-events-none z-0"
-        style={{
-          background: 'radial-gradient(circle, rgba(32, 152, 242, 0.3) 0%, transparent 70%)',
-          filter: 'blur(120px)',
-        }}
-      />
-
-      {/* 2. Background Rotated Cards (-25deg) with Interactive 3D Parallax */}
-      <div
-        ref={cardsContainerRef}
-        className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-25 hover:opacity-30 transition-opacity will-change-transform"
-      >
-        {/* Card 1: Top-Center / Left (transformed -25deg) */}
-        <div
-          ref={card1Ref}
-          className="absolute -top-16 left-[25%] w-[680px] h-[640px] rounded-3xl bg-white/95 border border-white/60 p-6 hidden md:flex flex-col gap-4 will-change-transform"
-          style={{
-            transform: 'rotate(-25deg)',
-            boxShadow: '20px 10px 50px rgba(0, 0, 0, 0.25)',
-          }}
-        >
-          {/* Mockup Header: Patient & Clinic banner */}
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0F58B6] flex items-center justify-center font-bold">
-                <Stethoscope className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-800">Orthopedic &amp; Clinical Health Center</p>
-                <p className="text-[10px] text-slate-400">Prescription Verification &amp; Medication Schedule</p>
-              </div>
-            </div>
-            <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-bold border border-emerald-200">
-              Active Rx
-            </span>
-          </div>
-
-          {/* Wait for Documents / Processing Card Banner */}
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-100 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-full bg-blue-500/15 flex items-center justify-center text-[#0F58B6]">
-              <Clock className="w-6 h-6" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-slate-800">Wait For Prescription Verification</p>
-              <p className="text-[11px] text-slate-500">Organizing prescription schedule and dose intervals</p>
-            </div>
-          </div>
-
-          {/* Mock Medication Items */}
-          <div className="space-y-2 pt-1">
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <Pill className="w-4 h-4 text-blue-600" />
-                <div>
-                  <p className="text-xs font-bold text-slate-800">Amoxicillin 500mg</p>
-                  <p className="text-[10px] text-slate-400">TDS · 1-0-1 Post Meal</p>
-                </div>
-              </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">08:00 AM</span>
-            </div>
-
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
-                <Pill className="w-4 h-4 text-emerald-600" />
-                <div>
-                  <p className="text-xs font-bold text-slate-800">Metformin 500mg</p>
-                  <p className="text-[10px] text-slate-400">BD · With Breakfast &amp; Dinner</p>
-                </div>
-              </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700">01:00 PM</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: Top-Right (transformed -25deg) - Calendar & Month Schedule */}
-        <div
-          ref={card2Ref}
-          className="absolute -top-32 right-[-5%] w-[620px] h-[600px] rounded-3xl bg-white/95 border border-white/60 p-6 hidden lg:flex flex-col gap-4 will-change-transform"
-          style={{
-            transform: 'rotate(-25deg)',
-            boxShadow: '20px 10px 50px rgba(0, 0, 0, 0.25)',
-          }}
-        >
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-blue-600" />
-              <span className="text-xs font-bold text-slate-800">Medication Routine Calendar</span>
-            </div>
-            <span className="text-[10px] font-bold text-slate-400">October 2026</span>
-          </div>
-
-          <div className="grid grid-cols-7 gap-2 text-center text-xs font-semibold text-slate-400">
-            <span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
-          </div>
-          <div className="grid grid-cols-7 gap-2 text-center text-xs">
-            {Array.from({ length: 28 }).map((_, i) => (
-              <div
-                key={i}
-                className={`h-9 rounded-xl flex items-center justify-center font-bold ${
-                  i === 14
-                    ? 'bg-[#2098F2] text-white shadow-md'
-                    : i === 18
-                    ? 'bg-emerald-500 text-white shadow-md'
-                    : 'bg-slate-50 text-slate-600'
-                }`}
-              >
-                {i + 1}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Card 3: Bottom-Left (transformed -25deg) */}
-        <div
-          ref={card3Ref}
-          className="absolute bottom-[-180px] -left-20 w-[640px] h-[580px] rounded-3xl bg-white/95 border border-white/60 p-6 hidden md:flex flex-col gap-4 will-change-transform"
-          style={{
-            transform: 'rotate(-25deg)',
-            boxShadow: '20px 10px 50px rgba(0, 0, 0, 0.25)',
-          }}
-        >
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-            <span className="text-xs font-bold text-slate-800">Daily Medicine Schedule</span>
-            <span className="text-[10px] font-bold text-emerald-600">Active</span>
-          </div>
-          <div className="p-3 rounded-xl bg-emerald-50 text-emerald-800 text-xs font-medium">
-            ✓ Doses scheduled across active prescriptions
-          </div>
-        </div>
-
-        {/* Card 4: Bottom-Right (transformed -25deg) - Clinical Care Roster */}
-        <div
-          ref={card4Ref}
-          className="absolute -bottom-36 right-[18%] w-[650px] h-[550px] rounded-3xl bg-white/95 border border-white/60 p-6 hidden lg:flex flex-col gap-4 will-change-transform"
-          style={{
-            transform: 'rotate(-25deg)',
-            boxShadow: '20px 10px 50px rgba(0, 0, 0, 0.25)',
-          }}
-        >
-          <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-            <span className="text-xs font-bold text-slate-800">Prescribing Physicians</span>
-            <span className="text-[10px] text-blue-600 font-semibold">4 Registered</span>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
-                DR
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-800">Dr. Darlene Robertson</p>
-                <p className="text-[10px] text-slate-400">Head Surgeon</p>
-              </div>
-            </div>
-            <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
-                DS
-              </div>
-              <div>
-                <p className="text-xs font-bold text-slate-800">Dr. Schlimmer</p>
-                <p className="text-[10px] text-slate-400">Cardiologist</p>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="relative min-h-screen w-full bg-[#070D18] text-white font-sans overflow-x-hidden selection:bg-[#2098F2] selection:text-white flex flex-col justify-between">
+      {/* 1. Full-Bleed Atmospheric Background Plate (Image 2) */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <Image
+          src="/images/landing-bg.jpg"
+          alt="Prescriptime Clinic & Medicine Organization Atmosphere"
+          fill
+          priority
+          quality={95}
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        {/* Subtle Vignette & Dark Contrast Scrim on Left for Typography Legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#070D18]/90 via-[#070D18]/70 to-transparent lg:to-transparent pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#070D18] via-transparent to-[#070D18]/40 pointer-events-none" />
       </div>
 
-      {/* 3. Top Clean Navigation Header */}
-      <header className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6 flex items-center justify-between">
-        <div className="flex items-center gap-2.5 sm:gap-3">
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-white shadow-md flex items-center justify-center border border-white/80 shrink-0">
-            <Pill className="w-5 h-5 sm:w-6 sm:h-6 text-[#0F58B6] transform -rotate-45" />
-          </div>
-          <div>
-            <span className="text-xl sm:text-2xl font-black tracking-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
-              Prescriptime
-            </span>
-            <span className="hidden sm:inline-block ml-2.5 px-2.5 py-0.5 rounded-full bg-white/20 text-white text-[10px] font-bold tracking-wider backdrop-blur-md border border-white/30">
-              DIGITAL PRESCRIPTION EDITION
-            </span>
-          </div>
-        </div>
-      </header>
-
-      {/* 4. Center Main Stage: Hero Typography (Left) & Crisp Card (Right) */}
-      <main className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-12 lg:py-20 my-auto flex flex-col lg:flex-row items-center lg:items-center justify-between gap-8 lg:gap-12">
-        
-        {/* Left / Center: Hero Typography with High Contrast */}
-        <div className="w-full lg:flex-1 lg:max-w-3xl xl:max-w-4xl space-y-3 sm:space-y-4 text-center lg:text-left min-w-0">
-          {/* Subtitle Line 1: PRESCRIPTION ORGANIZER & MEDICINE SCHEDULES */}
-          <div className="flex items-center justify-center lg:justify-start">
-            <span className="px-3 sm:px-3.5 py-1 rounded-full bg-white/15 text-sky-100 font-extrabold text-[10px] sm:text-xs md:text-sm uppercase tracking-wider sm:tracking-[0.2em] backdrop-blur-md border border-white/25 shadow-sm text-center leading-tight">
-              PRESCRIPTION ORGANIZER &amp; MEDICINE SCHEDULES
-            </span>
-          </div>
-
-          {/* Main Huge Brand Title: PRESCRIPTIME (whitespace-nowrap ensures 'E' never wraps down) */}
-          <h1 className="text-3xl xs:text-4xl sm:text-6xl md:text-7xl lg:text-[76px] xl:text-[92px] font-black text-white tracking-tighter leading-none drop-shadow-[0_8px_30px_rgba(0,0,0,0.45)] select-none whitespace-nowrap">
-            PRESCRIPTIME
-          </h1>
-
-          {/* Subtitle Line 3: DIGITAL PRESCRIPTION EDITION */}
-          <div className="pt-1">
-            <p className="text-base xs:text-lg sm:text-xl md:text-2xl font-black text-white uppercase tracking-wider sm:tracking-[0.2em] drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]">
-              DIGITAL PRESCRIPTION EDITION
-            </p>
-          </div>
-
-          {/* Clean Description */}
-          <p className="text-xs sm:text-sm md:text-base text-white/95 max-w-lg mx-auto lg:mx-0 font-medium drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)] leading-relaxed pt-1">
-            Digitally organize doctor prescriptions, decipher handwriting, manage automated dose schedules, and track medication routines.
-          </p>
-        </div>
-
-        {/* Right: Crisp, High-Contrast Frosted Card with GET STARTED button */}
-        <div className="w-full lg:w-auto flex justify-center">
-          <div
-            className="w-full max-w-[480px] lg:w-[500px] rounded-[24px] sm:rounded-[32px] p-5 sm:p-8 md:p-9 relative overflow-hidden transition-all duration-300 hover:shadow-2xl bg-white/95 backdrop-blur-2xl border border-white shadow-[0_25px_60px_rgba(0,0,0,0.25)]"
-          >
-            {/* Ambient inner soft sheen */}
-            <div className="absolute top-0 right-0 w-48 h-48 bg-blue-100/40 rounded-full blur-2xl pointer-events-none" />
-
-            <div className="relative z-10 space-y-4 sm:space-y-6">
-              {/* Header inside frosted card */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full bg-blue-50 border border-blue-200">
-                  <div className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-blue-500 animate-pulse" />
-                  <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-blue-800">
-                    Prescription Organizer
-                  </span>
-                </div>
-                <span className="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase tracking-widest font-mono">
-                  Prescriptime
-                </span>
-              </div>
-
-              {/* Action Title inside card */}
-              <div className="space-y-1 sm:space-y-2">
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
-                  Manage Your Prescriptions
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
-                  Sign in to view your daily medicine schedules, active prescriptions, and dose reminders.
-                </p>
-              </div>
-
-              {/* The #2098F2 Hero Pill Button renamed to GET STARTED */}
-              <button
-                type="button"
-                onClick={() => setShowLoginPage(true)}
-                id="landing-hero-standard-login-btn"
-                className="w-full h-[58px] sm:h-[72px] rounded-[20px] sm:rounded-[28px] bg-[#2098F2] hover:bg-[#1588de] active:scale-[0.98] text-white font-extrabold text-xl sm:text-2xl md:text-3xl flex items-center justify-center gap-3 sm:gap-4 shadow-xl shadow-blue-500/35 transition-all duration-200 group cursor-pointer border border-white/40"
-              >
-                <span className="tracking-wider uppercase">GET STARTED</span>
-                <ArrowRight className="w-6 h-6 sm:w-7 sm:h-7 text-white transform group-hover:translate-x-2 transition-transform" />
-              </button>
-
-              {/* Zero manual entry trust note */}
-              <div className="pt-2 flex items-center justify-end text-xs text-slate-500 font-semibold border-t border-slate-100/80">
-                <span className="text-[10px] sm:text-[11px] text-slate-500 font-mono font-medium">
-                  Zero Manual Entry
-                </span>
+      {/* 2. Top Header Navigation */}
+      <header className="relative z-20 w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 pt-6 sm:pt-8 flex items-center justify-between">
+        {/* Brand Logo & Tagline (Pill icon with blue and white) */}
+        <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setShowLoginPage(false)}>
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#2098F2] to-[#0F58B6] p-0.5 shadow-lg shadow-blue-500/25 flex items-center justify-center">
+            <div className="w-full h-full rounded-[14px] bg-[#0A1628] flex items-center justify-center relative overflow-hidden">
+              {/* Modern Diagonal Capsule / Pill Icon */}
+              <div className="w-6 h-3.5 rounded-full border-2 border-white transform -rotate-45 relative flex overflow-hidden shadow-sm">
+                <div className="w-1/2 h-full bg-[#2098F2]" />
+                <div className="w-1/2 h-full bg-white" />
               </div>
             </div>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-xl sm:text-2xl font-black tracking-tight text-white leading-none">
+              Prescriptime
+            </span>
+            <span className="text-[11px] sm:text-xs text-sky-200/80 font-medium tracking-wide mt-1">
+              Your Health. Organized.
+            </span>
+          </div>
+        </div>
+
+        {/* Top Right Quick Sign In */}
+        <button
+          type="button"
+          onClick={() => setShowLoginPage(true)}
+          className="px-4 sm:px-5 py-2 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-xs sm:text-sm font-bold text-white backdrop-blur-md border border-white/20 transition-all duration-200 cursor-pointer shadow-sm"
+        >
+          Sign In
+        </button>
+      </header>
+
+      {/* 3. Hero Main Stage */}
+      <main className="relative z-10 w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 py-8 sm:py-12 my-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+        
+        {/* LEFT COLUMN: Hero Copy & Actions */}
+        <div className="lg:col-span-6 xl:col-span-5 space-y-6 sm:space-y-7 text-left">
+          
+          {/* Tagline Pill Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0D1B30]/80 border border-[#2098F2]/30 backdrop-blur-xl shadow-lg shadow-blue-900/30">
+            <div className="w-5 h-5 rounded-full bg-[#2098F2]/20 flex items-center justify-center text-[#2098F2]">
+              <Activity className="w-3.5 h-3.5 animate-pulse" />
+            </div>
+            <span className="text-[11px] sm:text-xs font-extrabold uppercase tracking-wider text-sky-200">
+              From Prescriptions to a Healthier Tomorrow
+            </span>
+          </div>
+
+          {/* Main Huge Typography Headline */}
+          <div className="space-y-1">
+            <h1 className="text-4xl sm:text-6xl xl:text-[68px] font-black text-white tracking-tight leading-[1.08] drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+              More Than <br />
+              Prescriptions. <br />
+              <span className="text-[#2098F2] drop-shadow-[0_0_35px_rgba(32,152,242,0.6)]">
+                A Healthier You.
+              </span>
+            </h1>
+          </div>
+
+          {/* Explanatory Subtitle */}
+          <p className="text-sm sm:text-base md:text-lg text-slate-300 font-normal leading-relaxed max-w-lg drop-shadow-sm">
+            Prescriptime helps you digitize, organize, and stay on top of your medicines — so you and your loved ones live healthier, worry-free.
+          </p>
+
+          {/* Call to Action Buttons */}
+          <div className="flex flex-wrap items-center gap-4 pt-2">
+            {/* Primary Action: Get Started */}
+            <button
+              type="button"
+              id="hero-get-started-btn"
+              onClick={() => setShowLoginPage(true)}
+              className="h-[52px] sm:h-[58px] px-8 sm:px-10 rounded-full bg-[#2098F2] hover:bg-[#1985d8] active:scale-[0.97] text-white font-black text-base sm:text-lg flex items-center gap-3 shadow-xl shadow-blue-500/35 transition-all duration-200 cursor-pointer group border border-white/20"
+            >
+              <span>Get Started</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+            </button>
+
+            {/* Secondary Action: Watch Video Modal Trigger */}
+            <button
+              type="button"
+              id="hero-watch-video-btn"
+              onClick={() => setIsVideoModalOpen(true)}
+              className="h-[52px] sm:h-[58px] px-6 sm:px-8 rounded-full bg-slate-900/60 hover:bg-slate-800/80 active:scale-[0.97] text-white font-bold text-sm sm:text-base flex items-center gap-3 backdrop-blur-xl border border-white/25 shadow-lg shadow-black/30 transition-all duration-200 cursor-pointer group"
+            >
+              <div className="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+                <Play className="w-4 h-4 fill-white text-white ml-0.5" />
+              </div>
+              <span>Watch Video</span>
+            </button>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: 3D Smartphone, Floating Glass Cards & Pedestal Showcase (Image 1) */}
+        <div className="lg:col-span-6 xl:col-span-7 relative flex items-center justify-center lg:justify-end">
+          <div className="relative w-full max-w-[620px] aspect-[4/3] sm:aspect-[16/11] rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.01]">
+            {/* High-Resolution 3D Render Composite */}
+            <Image
+              src="/images/landing-composite.jpg"
+              alt="Prescriptime Mobile Medication App & 3D Interactive Showcase"
+              fill
+              priority
+              quality={95}
+              className="object-cover object-right sm:object-center"
+              sizes="(max-width: 1024px) 100vw, 680px"
+            />
+            {/* Soft border and inner glass ambient glow */}
+            <div className="absolute inset-0 rounded-3xl border border-white/20 pointer-events-none shadow-[inset_0_0_30px_rgba(32,152,242,0.15)]" />
           </div>
         </div>
 
       </main>
 
-      {/* 5. Minimalist Bottom Footer */}
-      <footer className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 border-t border-white/20 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs text-white/90 gap-2 text-center sm:text-left drop-shadow-sm">
-        <p>© 2026 Prescriptime. Digital Prescription Organizer &amp; Medicine Schedules.</p>
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[10px] sm:text-[11px]">
-          <span>AI Prescription Vision</span>
-          <span>•</span>
-          <span>Medicine Schedule Overview</span>
-          <span>•</span>
-          <span>Built on Firebase</span>
+      {/* 4. Bottom Value Proposition Ribbon & Clinical Quote */}
+      <section className="relative z-10 w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 py-4 sm:py-6">
+        <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#091426]/75 backdrop-blur-xl border border-white/15 shadow-2xl flex flex-col xl:flex-row items-center justify-between gap-6">
+          
+          {/* 4 Value Pillars */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full xl:w-auto flex-1">
+            {/* 1. Secure & Private */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#0B254A] border border-[#2098F2]/30 flex items-center justify-center text-[#2098F2] flex-shrink-0 shadow-sm">
+                <Shield className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-xs sm:text-sm font-black text-white leading-snug">Secure &amp; Private</h4>
+                <p className="text-[11px] sm:text-xs text-slate-400 font-medium truncate">Your data, your control</p>
+              </div>
+            </div>
+
+            {/* 2. AI-Powered */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#0B254A] border border-[#2098F2]/30 flex items-center justify-center text-[#2098F2] flex-shrink-0 shadow-sm">
+                <Zap className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-xs sm:text-sm font-black text-white leading-snug">AI-Powered</h4>
+                <p className="text-[11px] sm:text-xs text-slate-400 font-medium truncate">Smart &amp; accurate</p>
+              </div>
+            </div>
+
+            {/* 3. Built for You */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#0B254A] border border-[#2098F2]/30 flex items-center justify-center text-[#2098F2] flex-shrink-0 shadow-sm">
+                <Heart className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-xs sm:text-sm font-black text-white leading-snug">Built for You</h4>
+                <p className="text-[11px] sm:text-xs text-slate-400 font-medium truncate">Simple. Reliable. Effective.</p>
+              </div>
+            </div>
+
+            {/* 4. For Families */}
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#0B254A] border border-[#2098F2]/30 flex items-center justify-center text-[#2098F2] flex-shrink-0 shadow-sm">
+                <Users className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-xs sm:text-sm font-black text-white leading-snug">For Families</h4>
+                <p className="text-[11px] sm:text-xs text-slate-400 font-medium truncate">Care for the ones you love</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Vertical Separator (Desktop) */}
+          <div className="hidden xl:block w-[1px] h-10 bg-white/20 mx-2" />
+
+          {/* Inspirational Quote on Right */}
+          <div className="w-full xl:w-auto text-center xl:text-right border-t xl:border-t-0 pt-3 xl:pt-0 border-white/10">
+            <p className="text-xs sm:text-sm font-semibold text-slate-200 italic">
+              &ldquo;Good health gives you the freedom to do more.&rdquo;
+            </p>
+            <div className="w-12 h-0.5 bg-[#2098F2] rounded-full mx-auto xl:ml-auto xl:mr-0 mt-1.5" />
+          </div>
+
+        </div>
+      </section>
+
+      {/* 5. Minimalist Clean Footer */}
+      <footer className="relative z-10 w-full max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-14 py-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
+        <p>© 2026 Prescriptime. All rights reserved.</p>
+        <div className="flex items-center gap-4 text-xs font-semibold">
+          <button
+            type="button"
+            onClick={() => setActiveInfoModal('privacy')}
+            className="hover:text-white transition-colors cursor-pointer"
+          >
+            Privacy
+          </button>
+          <span>|</span>
+          <button
+            type="button"
+            onClick={() => setActiveInfoModal('terms')}
+            className="hover:text-white transition-colors cursor-pointer"
+          >
+            Terms
+          </button>
+          <span>|</span>
+          <button
+            type="button"
+            onClick={() => setActiveInfoModal('contact')}
+            className="hover:text-white transition-colors cursor-pointer"
+          >
+            Contact
+          </button>
         </div>
       </footer>
+
+      {/* 6. Video Modal Popup (Mini Pop Up Showing YouTube Video + Close Option) */}
+      {isVideoModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/85 backdrop-blur-md animate-fadeIn"
+          onClick={() => setIsVideoModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-4xl rounded-3xl bg-[#0A1322] border border-[#2098F2]/40 shadow-[0_25px_70px_rgba(0,0,0,0.8)] overflow-hidden animate-scaleUp"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header Bar */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/15 bg-[#0D1A2D]">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-[#2098F2]/20 flex items-center justify-center text-[#2098F2]">
+                  <Play className="w-4 h-4 fill-[#2098F2]" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-black text-white">Prescriptime Product Overview</h3>
+                  <p className="text-[11px] text-slate-400">Discover smart prescription organization &amp; dose tracking</p>
+                </div>
+              </div>
+
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setIsVideoModalOpen(false)}
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer"
+                aria-label="Close video player"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Responsive 16:9 YouTube Video Player */}
+            <div className="relative w-full aspect-video bg-black">
+              <iframe
+                src="https://www.youtube.com/embed/9No-FiEInLA?autoplay=1&rel=0"
+                title="Prescriptime Digital Prescription Overview Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+
+            {/* Modal Footer Call to Action */}
+            <div className="px-6 py-4 bg-[#091424] flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/10">
+              <p className="text-xs text-slate-300 text-center sm:text-left">
+                Ready to take control of your medication schedules and prescriptions?
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsVideoModalOpen(false);
+                  setShowLoginPage(true);
+                }}
+                className="px-5 py-2 rounded-full bg-[#2098F2] hover:bg-[#1885d8] text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-2"
+              >
+                <span>Get Started Free</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 7. Informational Dialog (Privacy / Terms / Contact) */}
+      {activeInfoModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          onClick={() => setActiveInfoModal(null)}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl bg-[#0D192E] border border-white/20 p-6 shadow-2xl text-left"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+              <h3 className="text-lg font-black text-white capitalize">{activeInfoModal} Information</h3>
+              <button
+                type="button"
+                onClick={() => setActiveInfoModal(null)}
+                className="text-slate-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {activeInfoModal === 'privacy' && (
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Your medical prescriptions, records, and schedules are strictly private and encrypted. Prescriptime adheres to zero-trust data access standards and never shares clinical patient details with third parties.
+              </p>
+            )}
+            {activeInfoModal === 'terms' && (
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                Prescriptime provides medication organization, reminder assistance, and clinical text extraction. It is intended for informational support and does not replace direct professional medical diagnosis or emergency healthcare advice.
+              </p>
+            )}
+            {activeInfoModal === 'contact' && (
+              <div className="text-xs sm:text-sm text-slate-300 space-y-2">
+                <p>Have questions, clinical inquiries, or feature suggestions?</p>
+                <p className="font-semibold text-sky-400">support@prescriptime.app</p>
+                <p className="text-slate-400 text-xs">Available Monday–Friday, 9:00 AM – 6:00 PM IST.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
