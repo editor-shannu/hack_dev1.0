@@ -8,10 +8,12 @@ import {
   Play,
   X,
   Shield,
-  Zap,
-  Heart,
+  Cpu,
+  Globe,
   Users,
-  Activity,
+  Pill,
+  Calendar,
+  BarChart2,
 } from 'lucide-react';
 
 export function LandingPage() {
@@ -49,14 +51,14 @@ export function LandingPage() {
           className="object-cover object-center"
           sizes="100vw"
         />
-        {/* Dark gradient overlay — lighter so image is clearly visible */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#050d1b]/80 via-[#060d1c]/45 to-transparent" />
-        {/* Subtle top/bottom vignette */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050d1b]/60 via-transparent to-[#050d1b]/15" />
+        {/* Soft left gradient to ensure text readability on all screen resolutions */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#040915] via-[#040915]/90 via-38% to-transparent" />
+        {/* Subtle vignette on top/bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#040915]/40 via-transparent to-[#040915]/20" />
       </div>
 
       {/* ── HEADER ── */}
-      <header className="relative z-20 w-full px-6 sm:px-10 lg:px-16 pt-5 sm:pt-7 flex items-center justify-between flex-shrink-0">
+      <header className="relative z-20 w-full px-6 sm:px-10 lg:px-16 pt-5 sm:pt-6 flex items-center justify-between flex-shrink-0">
         {/* Logo */}
         <div
           className="flex items-center gap-2.5 cursor-pointer select-none"
@@ -73,8 +75,6 @@ export function LandingPage() {
             <div className="text-[10px] text-sky-300/70 font-medium tracking-wide">Your Health. Organized.</div>
           </div>
         </div>
-
-
       </header>
 
       {/* ── HERO ── */}
@@ -82,24 +82,21 @@ export function LandingPage() {
         <div className="w-full px-6 sm:px-10 lg:px-16 flex items-center">
 
           {/* LEFT: Copy */}
-          <div className="flex flex-col gap-4 sm:gap-5 max-w-xl py-3 lg:py-0">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0D1E35]/90 border border-[#2098F2]/35 w-fit">
-              <Activity className="w-3.5 h-3.5 text-[#2098F2] animate-pulse flex-shrink-0" />
-              <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-widest text-sky-200">
-                FROM PRESCRIPTIONS TO A HEALTHIER TOMORROW
-              </span>
-            </div>
+          <div className="flex flex-col gap-3.5 sm:gap-4 max-w-xl py-2 lg:py-0 z-10">
+            {/* Tagline */}
+            <p className="text-[10px] sm:text-[11.5px] font-bold tracking-[0.22em] text-slate-400 uppercase font-sans">
+              FROM PRESCRIPTIONS TO A HEALTHIER TOMORROW
+            </p>
 
-            {/* Headline */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[46px] xl:text-[54px] font-black tracking-tight leading-[1.08] text-white">
+            {/* Headline with Serif styling */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[50px] xl:text-[56px] font-serif font-black tracking-tight leading-[1.06] text-white">
               More Than <br />
               Prescriptions.<br />
-              <span className="text-[#2098F2]">A Healthier You.</span>
+              <span className="text-[#2098F2] font-sans font-black">A Healthier You.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-sm lg:text-base text-slate-300/90 leading-relaxed max-w-[480px]">
+            <p className="text-xs sm:text-sm lg:text-[15px] text-slate-300/90 leading-relaxed max-w-[480px]">
               Prescriptime helps you digitize, organize, and stay on top of your medicines — so you and your loved ones live healthier, worry-free.
             </p>
 
@@ -109,7 +106,7 @@ export function LandingPage() {
                 type="button"
                 id="hero-get-started-btn"
                 onClick={() => setShowLoginPage(true)}
-                className="h-[46px] sm:h-[50px] px-6 sm:px-8 rounded-full bg-[#2098F2] hover:bg-[#1985d8] active:scale-[0.97] text-white font-black text-xs sm:text-sm lg:text-base flex items-center gap-2.5 shadow-xl shadow-blue-500/35 transition-all duration-200 cursor-pointer group"
+                className="h-[46px] sm:h-[50px] px-7 sm:px-8 rounded-full bg-[#2098F2] hover:bg-[#1985d8] active:scale-[0.97] text-white font-black text-xs sm:text-sm lg:text-base flex items-center gap-2.5 shadow-xl shadow-blue-500/35 transition-all duration-200 cursor-pointer group"
               >
                 <span>Get Started</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -119,55 +116,79 @@ export function LandingPage() {
                 type="button"
                 id="hero-watch-video-btn"
                 onClick={() => setIsVideoModalOpen(true)}
-                className="h-[46px] sm:h-[50px] px-5 sm:px-7 rounded-full bg-white/8 hover:bg-white/15 active:scale-[0.97] text-white font-bold text-xs sm:text-sm lg:text-base flex items-center gap-2.5 border border-white/20 backdrop-blur-sm transition-all duration-200 cursor-pointer group"
+                className="h-[46px] sm:h-[50px] px-5 sm:px-7 rounded-full bg-white/10 hover:bg-white/15 active:scale-[0.97] text-white font-bold text-xs sm:text-sm lg:text-base flex items-center gap-2.5 border border-white/20 backdrop-blur-md transition-all duration-200 cursor-pointer group"
               >
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/15 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Play className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-white text-white ml-0.5" />
                 </div>
                 <span>Watch Video</span>
               </button>
+            </div>
+
+            {/* 4 Mini Feature Chips (Organize, Track, Stay Informed, Families) */}
+            <div className="flex flex-wrap items-center gap-2 pt-1.5">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.06] border border-white/10 backdrop-blur-md text-[11px] font-medium text-slate-300">
+                <div className="w-5 h-5 rounded-md bg-[#0F3563] flex items-center justify-center text-[#2098F2]">
+                  <Pill className="w-3 h-3" />
+                </div>
+                <span>Organize Medications</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.06] border border-white/10 backdrop-blur-md text-[11px] font-medium text-slate-300">
+                <div className="w-5 h-5 rounded-md bg-[#0F3563] flex items-center justify-center text-[#2098F2]">
+                  <Calendar className="w-3 h-3" />
+                </div>
+                <span>Track Adherence</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.06] border border-white/10 backdrop-blur-md text-[11px] font-medium text-slate-300">
+                <div className="w-5 h-5 rounded-md bg-[#0F3563] flex items-center justify-center text-[#2098F2]">
+                  <BarChart2 className="w-3 h-3" />
+                </div>
+                <span>Stay Informed</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.06] border border-white/10 backdrop-blur-md text-[11px] font-medium text-slate-300">
+                <div className="w-5 h-5 rounded-md bg-[#0F3563] flex items-center justify-center text-[#2098F2]">
+                  <Users className="w-3 h-3" />
+                </div>
+                <span>Healthier Families</span>
+              </div>
             </div>
           </div>
 
         </div>
       </main>
 
-      {/* ── BOTTOM VALUE RIBBON ── */}
+      {/* ── BOTTOM VALUE RIBBON (4 Columns) ── */}
       <section className="relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-2 sm:pb-3 flex-shrink-0">
-        <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl px-5 sm:px-8 py-3 sm:py-3.5 flex flex-col xl:flex-row items-center justify-between gap-3 sm:gap-4">
-          {/* 4 pillars */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5 w-full xl:w-auto flex-1">
+        <div className="rounded-2xl bg-[#071326]/75 border border-white/10 backdrop-blur-xl px-5 sm:px-8 py-3 sm:py-3.5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full">
             {[
               { icon: <Shield className="w-4 h-4" />, title: 'Secure & Private', sub: 'Your data, your control' },
-              { icon: <Zap className="w-4 h-4" />, title: 'AI-Powered', sub: 'Smart & accurate' },
-              { icon: <Heart className="w-4 h-4" />, title: 'Built for You', sub: 'Simple. Reliable. Effective.' },
+              { icon: <Cpu className="w-4 h-4" />, title: 'AI-Powered', sub: 'Smart, accurate, reliable' },
               { icon: <Users className="w-4 h-4" />, title: 'For Families', sub: 'Care for the ones you love' },
+              { icon: <Globe className="w-4 h-4" />, title: 'Accessible', sub: 'Designed for everyone' },
             ].map(({ icon, title, sub }) => (
               <div key={title} className="flex items-center gap-3">
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0B254A] border border-[#2098F2]/25 flex items-center justify-center text-[#2098F2] flex-shrink-0">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#082247] border border-[#2098F2]/40 flex items-center justify-center text-[#2098F2] shadow-sm shadow-blue-500/20 flex-shrink-0">
                   {icon}
                 </div>
                 <div className="min-w-0">
-                  <div className="text-xs font-black text-white leading-snug">{title}</div>
+                  <div className="text-xs sm:text-[13px] font-black text-white leading-snug">{title}</div>
                   <div className="text-[10px] sm:text-[11px] text-slate-400 truncate">{sub}</div>
                 </div>
               </div>
             ))}
           </div>
-
-          <div className="hidden xl:block w-px h-8 bg-white/15 mx-4" />
-
-          <p className="text-xs sm:text-sm font-semibold text-slate-200 italic text-center xl:text-right whitespace-nowrap">
-            &ldquo;Good health gives you the freedom to do more.&rdquo;
-            <span className="block w-10 h-0.5 bg-[#2098F2] rounded-full mt-1.5 ml-auto" />
-          </p>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="relative z-10 w-full px-6 sm:px-10 lg:px-16 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500 flex-shrink-0">
-        <span>&copy; {new Date().getFullYear()} Prescriptime. All rights reserved.</span>
-        <div className="flex items-center gap-5 font-medium">
+      <footer className="relative z-10 w-full px-6 sm:px-10 lg:px-16 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400 flex-shrink-0">
+        <div className="flex items-center gap-2 font-mono">
+          <span className="font-extrabold tracking-widest text-[#2098F2]">PRESCRIPTIME</span>
+          <span className="text-white/30 font-normal">|</span>
+          <span className="text-slate-300 font-bold tracking-wider">DIGITAL HEALTH. REAL IMPACT.</span>
+        </div>
+        <div className="flex items-center gap-6 font-medium">
           {(['privacy', 'terms', 'contact'] as const).map((key) => (
             <button
               key={key}
