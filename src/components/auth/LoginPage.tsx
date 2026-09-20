@@ -125,7 +125,6 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
           alt="Prescriptime Clinical Office Environment"
           fill
           priority
-          quality={95}
           className="object-cover object-center"
           sizes="100vw"
         />
@@ -334,7 +333,6 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
               alt="Prescriptime Doctor Clinic Dashboard & Schedule Mobile View"
               fill
               priority
-              quality={95}
               className="object-cover object-right sm:object-center"
               sizes="(max-width: 1280px) 50vw, 680px"
             />

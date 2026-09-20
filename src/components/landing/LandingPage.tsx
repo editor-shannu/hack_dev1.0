@@ -51,7 +51,6 @@ export function LandingPage() {
           alt="Prescriptime Clinic & Medicine Organization Atmosphere"
           fill
           priority
-          quality={95}
           className="object-cover object-center"
           sizes="100vw"
         />
@@ -162,7 +161,6 @@ export function LandingPage() {
               alt="Prescriptime Mobile Medication App & 3D Interactive Showcase"
               fill
               priority
-              quality={95}
               className="object-cover object-right sm:object-center"
               sizes="(max-width: 1024px) 100vw, 680px"
             />
