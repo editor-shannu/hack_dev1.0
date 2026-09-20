@@ -1,5 +1,5 @@
 import { Prescription } from '@/types/prescription';
-import { getStoredPrescriptions } from '@/lib/storage';
+import { getStoredPrescriptions, savePrescription } from '@/lib/storage';
 
 export interface FollowUpItem {
   id: string;
@@ -54,6 +54,7 @@ function parseDateToMidnight(dateStr: string): Date | null {
  * Scans stored prescriptions for any with a followUpDate in the future
  * or recently passed (within the last 14 days to highlight overdue visits).
  * Results are sorted soonest-first (overdue first, then today, then upcoming).
+ * Excludes follow-ups that have been marked as completed/done.
  */
 export function getUpcomingFollowUps(userId?: string): FollowUpItem[] {
   const allPrescriptions = getStoredPrescriptions(userId);
@@ -64,11 +65,14 @@ export function getUpcomingFollowUps(userId?: string): FollowUpItem[] {
   const items: FollowUpItem[] = [];
 
   for (const rx of allPrescriptions) {
+    // Skip if already marked as done
+    if (rx.followUpCompleted) continue;
+
     // Check prescription level followUpDate first, or latest doctor visit nextFollowUpDate
     const rawFollowUp =
       rx.followUpDate ||
       (rx.doctorVisits && rx.doctorVisits.length > 0
-        ? rx.doctorVisits.find((v) => v.nextFollowUpDate)?.nextFollowUpDate
+        ? rx.doctorVisits.find((v) => v.nextFollowUpDate && !v.nextFollowUpCompleted)?.nextFollowUpDate
         : undefined);
 
     if (!rawFollowUp) continue;
@@ -124,4 +128,30 @@ export function getUpcomingFollowUps(userId?: string): FollowUpItem[] {
   items.sort((a, b) => a.daysDifference - b.daysDifference);
 
   return items;
+}
+
+/**
+ * Marks a doctor follow-up for a given prescription as completed.
+ * Updates both prescription-level and doctor-visit follow-up state,
+ * saves to storage, and dispatches an update event.
+ */
+export function markFollowUpAsDone(prescriptionId: string, userId?: string): Prescription | null {
+  const allPrescriptions = getStoredPrescriptions(userId);
+  const targetRx = allPrescriptions.find((p) => p.id === prescriptionId);
+  if (!targetRx) return null;
+
+  const updatedVisits = (targetRx.doctorVisits || []).map((v) => ({
+    ...v,
+    nextFollowUpCompleted: true,
+  }));
+
+  const updatedRx: Prescription = {
+    ...targetRx,
+    followUpCompleted: true,
+    followUpCompletedAt: new Date().toISOString(),
+    doctorVisits: updatedVisits,
+  };
+
+  savePrescription(updatedRx, userId);
+  return updatedRx;
 }

@@ -36,6 +36,13 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ onOpenEMR, o
     }
   };
 
+  const [imageError, setImageError] = useState(false);
+
+  // Reset error state if photoURL changes
+  React.useEffect(() => {
+    setImageError(false);
+  }, [user?.photoURL]);
+
   if (loading) {
     return (
       <div className="h-9 w-24 rounded-xl bg-slate-100 border border-slate-200 animate-pulse" />
@@ -77,6 +84,8 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ onOpenEMR, o
     );
   }
 
+  const userInitial = (user.displayName || user.email || 'U').trim().charAt(0).toUpperCase();
+
   return (
     <div className="relative">
       <button
@@ -84,16 +93,21 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ onOpenEMR, o
         id="user-profile-menu-btn"
         className="flex items-center gap-2 p-1 pl-2 pr-2.5 rounded-xl bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700 shadow-sm transition-all text-left"
       >
-        {user.photoURL ? (
+        {user.photoURL && !imageError ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={user.photoURL}
             alt={user.displayName || 'User'}
-            className="w-6 h-6 rounded-full object-cover border border-blue-400"
+            className="w-6 h-6 rounded-full object-cover border border-blue-400 flex-shrink-0"
+            onError={() => setImageError(true)}
           />
         ) : (
-          <div className="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-[#0F58B6] dark:text-blue-400">
-            {isDemo ? <Sparkles className="w-3 h-3" /> : <UserIcon className="w-3.5 h-3.5" />}
+          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#0F58B6] to-[#2098F2] border border-blue-300 dark:border-blue-700 flex items-center justify-center text-white text-[10px] font-black shadow-xs flex-shrink-0">
+            {isDemo ? (
+              <Sparkles className="w-3 h-3 text-white" />
+            ) : (
+              <span>{userInitial}</span>
+            )}
           </div>
         )}
         <div className="flex items-center gap-1.5">

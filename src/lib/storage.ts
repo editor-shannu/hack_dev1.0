@@ -1383,4 +1383,4 @@ export async function syncWithServer(userId?: string): Promise<SyncResult> {
   };
 }
 
-export { getUpcomingFollowUps, type FollowUpItem } from '@/lib/followUps';
+export { getUpcomingFollowUps, markFollowUpAsDone, type FollowUpItem } from '@/lib/followUps';

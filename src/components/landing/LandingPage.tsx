@@ -36,7 +36,7 @@ export function LandingPage() {
   }
 
   return (
-    <div className="relative min-h-screen w-full text-white font-sans overflow-x-hidden selection:bg-[#2098F2] selection:text-white flex flex-col">
+    <div className="relative h-screen w-full text-white font-sans overflow-hidden selection:bg-[#2098F2] selection:text-white flex flex-col">
 
       {/* ── FULL-BLEED BACKGROUND IMAGE ── */}
       <div className="fixed inset-0 z-0 pointer-events-none">
@@ -78,11 +78,11 @@ export function LandingPage() {
       </header>
 
       {/* ── HERO ── */}
-      <main className="relative z-10 flex-1 w-full flex items-center">
-        <div className="w-full px-6 sm:px-10 lg:px-16 flex items-center min-h-[calc(100vh-180px)]">
+      <main className="relative z-10 flex-1 w-full flex items-center min-h-0">
+        <div className="w-full px-6 sm:px-10 lg:px-16 flex items-center">
 
           {/* LEFT: Copy */}
-          <div className="flex flex-col gap-5 sm:gap-6 max-w-xl py-8 lg:py-0">
+          <div className="flex flex-col gap-4 sm:gap-5 max-w-xl py-3 lg:py-0">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0D1E35]/90 border border-[#2098F2]/35 w-fit">
               <Activity className="w-3.5 h-3.5 text-[#2098F2] animate-pulse flex-shrink-0" />
@@ -92,14 +92,14 @@ export function LandingPage() {
             </div>
 
             {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[52px] xl:text-[60px] font-black tracking-tight leading-[1.06] text-white">
+            <h1 className="text-3xl sm:text-4xl lg:text-[46px] xl:text-[54px] font-black tracking-tight leading-[1.08] text-white">
               More Than <br />
               Prescriptions.<br />
               <span className="text-[#2098F2]">A Healthier You.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-sm sm:text-base text-slate-300/90 leading-relaxed max-w-[480px]">
+            <p className="text-xs sm:text-sm lg:text-base text-slate-300/90 leading-relaxed max-w-[480px]">
               Prescriptime helps you digitize, organize, and stay on top of your medicines — so you and your loved ones live healthier, worry-free.
             </p>
 
@@ -109,7 +109,7 @@ export function LandingPage() {
                 type="button"
                 id="hero-get-started-btn"
                 onClick={() => setShowLoginPage(true)}
-                className="h-[48px] sm:h-[52px] px-7 sm:px-9 rounded-full bg-[#2098F2] hover:bg-[#1985d8] active:scale-[0.97] text-white font-black text-sm sm:text-base flex items-center gap-2.5 shadow-xl shadow-blue-500/35 transition-all duration-200 cursor-pointer group"
+                className="h-[46px] sm:h-[50px] px-6 sm:px-8 rounded-full bg-[#2098F2] hover:bg-[#1985d8] active:scale-[0.97] text-white font-black text-xs sm:text-sm lg:text-base flex items-center gap-2.5 shadow-xl shadow-blue-500/35 transition-all duration-200 cursor-pointer group"
               >
                 <span>Get Started</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -119,10 +119,10 @@ export function LandingPage() {
                 type="button"
                 id="hero-watch-video-btn"
                 onClick={() => setIsVideoModalOpen(true)}
-                className="h-[48px] sm:h-[52px] px-6 sm:px-8 rounded-full bg-white/8 hover:bg-white/15 active:scale-[0.97] text-white font-bold text-sm sm:text-base flex items-center gap-2.5 border border-white/20 backdrop-blur-sm transition-all duration-200 cursor-pointer group"
+                className="h-[46px] sm:h-[50px] px-5 sm:px-7 rounded-full bg-white/8 hover:bg-white/15 active:scale-[0.97] text-white font-bold text-xs sm:text-sm lg:text-base flex items-center gap-2.5 border border-white/20 backdrop-blur-sm transition-all duration-200 cursor-pointer group"
               >
-                <div className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Play className="w-3.5 h-3.5 fill-white text-white ml-0.5" />
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/15 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Play className="w-3 sm:w-3.5 h-3 sm:h-3.5 fill-white text-white ml-0.5" />
                 </div>
                 <span>Watch Video</span>
               </button>
@@ -133,10 +133,10 @@ export function LandingPage() {
       </main>
 
       {/* ── BOTTOM VALUE RIBBON ── */}
-      <section className="relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-4 sm:pb-6 flex-shrink-0">
-        <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl px-5 sm:px-8 py-4 flex flex-col xl:flex-row items-center justify-between gap-4">
+      <section className="relative z-10 w-full px-6 sm:px-10 lg:px-16 pb-2 sm:pb-3 flex-shrink-0">
+        <div className="rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl px-5 sm:px-8 py-3 sm:py-3.5 flex flex-col xl:flex-row items-center justify-between gap-3 sm:gap-4">
           {/* 4 pillars */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 w-full xl:w-auto flex-1">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5 w-full xl:w-auto flex-1">
             {[
               { icon: <Shield className="w-4 h-4" />, title: 'Secure & Private', sub: 'Your data, your control' },
               { icon: <Zap className="w-4 h-4" />, title: 'AI-Powered', sub: 'Smart & accurate' },
@@ -144,12 +144,12 @@ export function LandingPage() {
               { icon: <Users className="w-4 h-4" />, title: 'For Families', sub: 'Care for the ones you love' },
             ].map(({ icon, title, sub }) => (
               <div key={title} className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#0B254A] border border-[#2098F2]/25 flex items-center justify-center text-[#2098F2] flex-shrink-0">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#0B254A] border border-[#2098F2]/25 flex items-center justify-center text-[#2098F2] flex-shrink-0">
                   {icon}
                 </div>
                 <div className="min-w-0">
                   <div className="text-xs font-black text-white leading-snug">{title}</div>
-                  <div className="text-[11px] text-slate-400 truncate">{sub}</div>
+                  <div className="text-[10px] sm:text-[11px] text-slate-400 truncate">{sub}</div>
                 </div>
               </div>
             ))}
@@ -165,7 +165,7 @@ export function LandingPage() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="relative z-10 w-full px-6 sm:px-10 lg:px-16 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500 flex-shrink-0">
+      <footer className="relative z-10 w-full px-6 sm:px-10 lg:px-16 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500 flex-shrink-0">
         <span>&copy; {new Date().getFullYear()} Prescriptime. All rights reserved.</span>
         <div className="flex items-center gap-5 font-medium">
           {(['privacy', 'terms', 'contact'] as const).map((key) => (
