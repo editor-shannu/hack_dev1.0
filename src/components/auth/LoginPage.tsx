@@ -19,7 +19,7 @@ interface LoginPageProps {
 
 export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
   const router = useRouter();
-  const { user, signInWithCredentials, signUpWithCredentials, signInWithGoogle } = useAuth();
+  const { user, signInWithCredentials, signUpWithCredentials, signInWithGoogle, enterDemoMode } = useAuth();
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [username, setUsername] = useState('');
@@ -98,6 +98,7 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
         window.location.href = '/';
       }
     } catch (err: any) {
+      console.error('Google Sign-In Error:', err);
       const code = err?.code || '';
       if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
         // User closed the popup — silent, no error shown
@@ -105,8 +106,10 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
         setError('Popup was blocked by your browser. Please allow popups for this site and try again.');
       } else if (code === 'auth/network-request-failed') {
         setError('Network error. Please check your connection and try again.');
+      } else if (code === 'auth/unauthorized-domain') {
+        setError('This domain is not authorized in Firebase Console (Authentication > Settings > Authorized Domains).');
       } else if (code === 'auth/internal-error' || code === 'auth/unknown') {
-        setError('Google Sign-In is temporarily unavailable. Please use email & password instead.');
+        setError('Google Sign-In encountered a browser restriction. Please use email & password instead.');
       } else {
         setError('Google Sign-In failed. Please try again or use email & password.');
       }
@@ -288,6 +291,24 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
                   {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Create new account"}
                 </span>
                 <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Quick Demo Mode Access */}
+            <div className="pt-1 text-center">
+              <button
+                type="button"
+                onClick={() => {
+                  enterDemoMode();
+                  if (typeof window !== 'undefined') {
+                    window.location.href = '/';
+                  }
+                }}
+                id="demo-mode-login-btn"
+                className="text-[11px] font-semibold text-slate-400 hover:text-slate-600 transition-colors inline-flex items-center gap-1 cursor-pointer"
+              >
+                <span>Need quick access?</span>
+                <span className="text-[#1877F2] hover:underline font-bold">Try Demo Account &rarr;</span>
               </button>
             </div>
 

@@ -5,6 +5,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import {
   auth,
   isFirebaseConfigured,
+  getRedirectResult,
   signInWithGoogle as fbSignInWithGoogle,
   signInWithEmail as fbSignInWithEmail,
   signUpWithEmail as fbSignUpWithEmail,
@@ -68,6 +69,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
 
     if (auth && isFirebaseConfigured) {
+      // Process pending redirect result if returning from a Google redirect sign-in
+      getRedirectResult(auth)
+        .then((result) => {
+          if (result?.user) {
+            const appUser: AppUser = {
+              uid: result.user.uid,
+              displayName: result.user.displayName,
+              email: result.user.email,
+              photoURL: result.user.photoURL,
+              isDemo: false,
+            };
+            setActiveUserId(result.user.uid);
+            setUser(appUser);
+            setIsDemo(false);
+            try {
+              localStorage.setItem('prescriptime_active_user', JSON.stringify(appUser));
+            } catch {}
+          }
+        })
+        .catch((err) => {
+          if (err?.code !== 'auth/null-user') {
+            console.warn('[Prescriptime Auth] getRedirectResult notice:', err?.code || err?.message);
+          }
+        });
+
       const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
         if (firebaseUser) {
           const appUser: AppUser = {
@@ -110,18 +136,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsDemo(false);
       clearMemoryStorage(true);
       const res = await fbSignInWithGoogle();
-      const appUser: AppUser = {
-        uid: res.uid,
-        displayName: res.displayName,
-        email: res.email,
-        photoURL: res.photoURL,
-        isDemo: false,
-      };
-      setActiveUserId(res.uid);
-      setUser(appUser);
-      try {
-        localStorage.setItem('prescriptime_active_user', JSON.stringify(appUser));
-      } catch {}
+      if (res) {
+        const appUser: AppUser = {
+          uid: res.uid,
+          displayName: res.displayName,
+          email: res.email,
+          photoURL: res.photoURL,
+          isDemo: false,
+        };
+        setActiveUserId(res.uid);
+        setUser(appUser);
+        try {
+          localStorage.setItem('prescriptime_active_user', JSON.stringify(appUser));
+        } catch {}
+      }
     } catch (err) {
       console.error('Sign in with Google failed:', err);
       throw err;

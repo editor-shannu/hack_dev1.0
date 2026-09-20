@@ -3,6 +3,8 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
@@ -65,16 +67,31 @@ export const initAnalytics = async () => {
 };
 
 /**
- * Sign in using Google Auth Popup
+ * Sign in using Google Auth (Popup with automatic seamless Redirect fallback)
  */
-export async function signInWithGoogle(): Promise<User> {
+export async function signInWithGoogle(): Promise<User | null> {
   if (!auth || !isFirebaseConfigured) {
     throw new Error(
       'Google Authentication is not configured on this deployment. Please add NEXT_PUBLIC_FIREBASE_API_KEY and other Firebase credentials to your Vercel project environment variables, or sign in using Username/Password.'
     );
   }
-  const result = await signInWithPopup(auth, googleProvider);
-  return result.user;
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    return result.user;
+  } catch (err: any) {
+    const code = err?.code || '';
+    // If popup is blocked by the browser, closed, or encounters cross-origin storage partitioning (auth/internal-error):
+    if (
+      code === 'auth/internal-error' ||
+      code === 'auth/popup-blocked' ||
+      code === 'auth/cancelled-popup-request'
+    ) {
+      console.warn(`[Prescriptime Auth] signInWithPopup encountered (${code}). Seamlessly transitioning to signInWithRedirect...`);
+      await signInWithRedirect(auth, googleProvider);
+      return null;
+    }
+    throw err;
+  }
 }
 
 /**
@@ -108,5 +125,5 @@ export async function signOutUser(): Promise<void> {
   }
 }
 
-export { onAuthStateChanged };
+export { onAuthStateChanged, getRedirectResult };
 export type { User };
