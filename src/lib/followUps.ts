@@ -65,8 +65,14 @@ export function getUpcomingFollowUps(userId?: string): FollowUpItem[] {
   const items: FollowUpItem[] = [];
 
   for (const rx of allPrescriptions) {
-    // Skip if already marked as done
-    if (rx.followUpCompleted) continue;
+    // Skip if already marked as done in object or persistent localStorage
+    const isCompleted =
+      rx.followUpCompleted ||
+      (typeof window !== 'undefined' &&
+        (localStorage.getItem(`prescriptime_followup_completed_${rx.id}`) === 'true' ||
+         (userId && localStorage.getItem(`prescriptime_followup_completed_${userId}_${rx.id}`) === 'true')));
+
+    if (isCompleted) continue;
 
     // Check prescription level followUpDate first, or latest doctor visit nextFollowUpDate
     const rawFollowUp =
@@ -136,6 +142,16 @@ export function getUpcomingFollowUps(userId?: string): FollowUpItem[] {
  * saves to storage, and dispatches an update event.
  */
 export function markFollowUpAsDone(prescriptionId: string, userId?: string): Prescription | null {
+  // 1. Immediately persist completion in local storage so it can never revert on sync lag
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(`prescriptime_followup_completed_${prescriptionId}`, 'true');
+      if (userId) {
+        localStorage.setItem(`prescriptime_followup_completed_${userId}_${prescriptionId}`, 'true');
+      }
+    } catch {}
+  }
+
   const allPrescriptions = getStoredPrescriptions(userId);
   const targetRx = allPrescriptions.find((p) => p.id === prescriptionId);
   if (!targetRx) return null;

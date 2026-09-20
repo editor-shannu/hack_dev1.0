@@ -1291,9 +1291,27 @@ export async function syncWithServer(userId?: string): Promise<SyncResult> {
     ]);
 
     if (rxRes.success && Array.isArray(rxRes.data)) {
-      const serverIds = new Set(rxRes.data.map((r: any) => r.id));
+      // Reconcile server prescriptions with locally completed follow-ups so polling/sync never reverts user actions
+      const reconciledPrescriptions = rxRes.data.map((serverRx: any) => {
+        const isLocallyCompleted =
+          (typeof window !== 'undefined' &&
+            (localStorage.getItem(`prescriptime_followup_completed_${serverRx.id}`) === 'true' ||
+              (effectiveUid && localStorage.getItem(`prescriptime_followup_completed_${effectiveUid}_${serverRx.id}`) === 'true'))) ||
+          memoryPrescriptions.find((p) => p.id === serverRx.id)?.followUpCompleted;
+
+        if (isLocallyCompleted && !serverRx.followUpCompleted) {
+          return {
+            ...serverRx,
+            followUpCompleted: true,
+            followUpCompletedAt: serverRx.followUpCompletedAt || new Date().toISOString(),
+          };
+        }
+        return serverRx;
+      });
+
+      const serverIds = new Set(reconciledPrescriptions.map((r: any) => r.id));
       const localOnly = memoryPrescriptions.filter((r) => !serverIds.has(r.id));
-      memoryPrescriptions = deduplicatePrescriptions([...rxRes.data, ...localOnly]);
+      memoryPrescriptions = deduplicatePrescriptions([...reconciledPrescriptions, ...localOnly]);
     }
     if (healthRes.success && Array.isArray(healthRes.data)) {
       const serverIds = new Set(healthRes.data.map((r: any) => r.id));

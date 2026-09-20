@@ -119,6 +119,8 @@ export async function POST(request: NextRequest) {
       fileType: safeFileType,
       uploadedAt: body.uploadedAt || new Date().toISOString(),
       createdAt: body.createdAt || new Date().toISOString(),
+      followUpCompleted: body.followUpCompleted !== undefined ? Boolean(body.followUpCompleted) : false,
+      followUpCompletedAt: body.followUpCompletedAt || (body.followUpCompleted ? new Date().toISOString() : undefined),
     };
 
     const updated = await PrescriptionModel.findOneAndUpdate(
