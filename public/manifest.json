@@ -1,0 +1,19 @@
+{
+  "name": "Prescriptime — Digital Prescription Organizer & Health Records",
+  "short_name": "Prescriptime",
+  "description": "Intelligent digital prescription organizer, medicine dose schedules, and health records management.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B58B6",
+  "theme_color": "#0F58B6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["medical", "health", "lifestyle"]
+}
