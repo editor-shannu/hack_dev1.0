@@ -16,14 +16,6 @@ import {
   BarChart2,
   FileText,
   Bell,
-  Check,
-  ChevronRight,
-  Home,
-  Clock,
-  MoreHorizontal,
-  Camera,
-  Wifi,
-  Battery,
 } from 'lucide-react';
 
 export function LandingPage() {
@@ -52,28 +44,28 @@ export function LandingPage() {
 
       {/* ── BACKGROUND LAYER: CLEAN AMBIENT ROOM & LIGHTING ── */}
       <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        {/* Clean background photo of cozy home with family on the right, no text or phones */}
+        {/* Clean background photo of cozy home with family on the far right, no text or phones */}
         <Image
           src="/images/landing-clean-bg.jpg"
           alt="Prescriptime Ambient Atmosphere"
           fill
           priority
           quality={95}
-          className="object-cover object-center"
+          className="object-cover object-[88%_center] lg:object-[90%_center]"
           sizes="100vw"
         />
 
-        {/* Deep cinematic overlay & left shadow for perfect text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#030914] via-[#040D1E]/85 via-45% to-transparent" />
+        {/* Deep cinematic overlay & left shadow for text contrast while keeping right side visible */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#030914] via-[#040D1E]/90 via-35% to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#030914] via-transparent to-[#030914]/40" />
 
-        {/* Subtle cyan ambient glows behind center mockup */}
-        <div className="absolute top-1/2 left-[55%] -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-[#2098F2]/15 rounded-full blur-[130px] pointer-events-none" />
-        <div className="absolute bottom-16 left-[58%] -translate-x-1/2 w-[350px] h-[120px] bg-sky-400/20 rounded-full blur-[80px] pointer-events-none" />
+        {/* Subtle cyan ambient glow behind center mockup */}
+        <div className="absolute top-1/2 left-[50%] -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#2098F2]/15 rounded-full blur-[130px] pointer-events-none" />
+        <div className="absolute bottom-16 left-[50%] -translate-x-1/2 w-[340px] h-[100px] bg-sky-400/20 rounded-full blur-[80px] pointer-events-none" />
       </div>
 
       {/* ── HEADER ── */}
-      <header className="relative z-20 w-full px-6 sm:px-10 lg:px-16 pt-5 sm:pt-6 flex items-center justify-between flex-shrink-0">
+      <header className="relative z-20 w-full px-6 sm:px-10 lg:px-14 xl:px-16 pt-5 sm:pt-6 flex items-center justify-between flex-shrink-0">
         <div
           className="flex items-center gap-2.5 cursor-pointer select-none"
           onClick={() => setShowLoginPage(false)}
@@ -92,11 +84,11 @@ export function LandingPage() {
       </header>
 
       {/* ── MAIN VIEWPORT CONTENT ── */}
-      <main className="relative z-10 flex-1 w-full flex items-center min-h-0 px-6 sm:px-10 lg:px-16">
-        <div className="w-full h-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 items-center gap-6 xl:gap-8">
+      <main className="relative z-10 flex-1 w-full flex items-center min-h-0 px-6 sm:px-10 lg:px-12 xl:px-16">
+        <div className="w-full h-full max-w-[1600px] mx-auto flex items-center justify-between gap-4">
 
-          {/* ════ LEFT COLUMN: COPY & ACTIONS (cols 1..6) ════ */}
-          <div className="lg:col-span-6 flex flex-col gap-3 sm:gap-3.5 py-2 z-20 max-w-xl">
+          {/* ════ LEFT ZONE: COPY & ACTIONS (~430-480px width) ════ */}
+          <div className="w-full lg:w-[430px] xl:w-[480px] flex flex-col gap-3 sm:gap-3.5 py-2 z-20 flex-shrink-0">
             {/* Tagline */}
             <p className="text-[10px] sm:text-[11px] font-bold tracking-[0.22em] text-slate-400 uppercase font-sans flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#2098F2] animate-pulse" />
@@ -104,14 +96,14 @@ export function LandingPage() {
             </p>
 
             {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[46px] xl:text-[52px] font-serif font-black tracking-tight leading-[1.08] text-white">
+            <h1 className="text-4xl sm:text-5xl lg:text-[45px] xl:text-[50px] font-serif font-black tracking-tight leading-[1.08] text-white">
               More Than <br />
               Prescriptions.<br />
               <span className="text-[#2098F2] font-sans font-black">A Healthier You.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-sm lg:text-[14.5px] text-slate-300/90 leading-relaxed max-w-[480px]">
+            <p className="text-xs sm:text-sm lg:text-[14px] text-slate-300/90 leading-relaxed max-w-[440px]">
               Prescriptime helps you digitize, organize, and stay on top of your medicines — so you and your loved ones live healthier, worry-free.
             </p>
 
@@ -169,41 +161,31 @@ export function LandingPage() {
             </div>
           </div>
 
-          {/* ════ RIGHT COLUMN: RE-CREATED 3D PHONE MOCKUP & 4 GLOWING FLOATING CARDS (cols 7..12) ════ */}
-          <div className="hidden lg:flex lg:col-span-6 h-full items-center justify-center relative select-none">
-
-            {/* Elegant cursive quote over the family background */}
-            <div className="absolute right-0 top-1/4 z-10 pointer-events-none transform -rotate-3 text-right">
-              <span className="font-serif italic text-amber-100/90 text-xl xl:text-2xl leading-relaxed tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] block font-normal whitespace-nowrap">
-                Care Today <br />
-                for Brighter Tomorrows
-              </span>
-            </div>
-
-            {/* Glowing Center Stage Container with 3 flex items: Left Cards, Phone, Right Cards */}
-            <div className="relative flex items-center justify-center gap-3 xl:gap-4 z-20">
+          {/* ════ CENTER ZONE: PHONE MOCKUP (WITH IMAGE 3) & 4 GLOWING FLOATING CARDS ════ */}
+          <div className="hidden lg:flex flex-1 h-full items-center justify-center relative select-none z-20 px-2 xl:px-4">
+            <div className="relative flex items-center justify-center gap-2.5 xl:gap-4 z-20">
 
               {/* ── LEFT FLOATING CARDS COLUMN ── */}
-              <div className="flex flex-col justify-between gap-24 z-30 flex-shrink-0 -mr-2">
+              <div className="flex flex-col justify-between gap-24 z-30 flex-shrink-0">
                 {/* Card 1: Scan Prescription */}
-                <div className="w-36 xl:w-40 p-2.5 rounded-2xl bg-[#091B33]/90 border border-sky-400/50 backdrop-blur-xl shadow-[0_12px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(32,152,242,0.4)] flex flex-col gap-1.5 transform hover:-translate-y-1 transition-transform">
+                <div className="w-34 xl:w-38 p-2.5 rounded-2xl bg-[#091B33]/90 border border-sky-400/50 backdrop-blur-xl shadow-[0_12px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(32,152,242,0.4)] flex flex-col gap-1.5 transform hover:-translate-y-1 transition-transform">
                   <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-[#2098F2] to-[#0A4BA3] flex items-center justify-center text-white shadow-md shadow-blue-500/40">
                     <FileText className="w-3.5 h-3.5" />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-white leading-tight">Scan Prescription</div>
-                    <div className="text-[9.5px] text-slate-300/80 leading-snug mt-0.5">Upload or take a photo</div>
+                    <div className="text-[9px] text-slate-300/80 leading-snug mt-0.5">Upload or take a photo</div>
                   </div>
                 </div>
 
                 {/* Card 2: Organize Medicines */}
-                <div className="w-36 xl:w-40 p-2.5 rounded-2xl bg-[#091B33]/90 border border-sky-400/50 backdrop-blur-xl shadow-[0_12px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(32,152,242,0.4)] flex flex-col gap-1.5 transform hover:-translate-y-1 transition-transform">
+                <div className="w-34 xl:w-38 p-2.5 rounded-2xl bg-[#091B33]/90 border border-sky-400/50 backdrop-blur-xl shadow-[0_12px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(32,152,242,0.4)] flex flex-col gap-1.5 transform hover:-translate-y-1 transition-transform">
                   <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-[#2098F2] to-[#0A4BA3] flex items-center justify-center text-white shadow-md shadow-blue-500/40">
                     <Pill className="w-3.5 h-3.5" />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-white leading-tight">Organize Medicines</div>
-                    <div className="text-[9.5px] text-slate-300/80 leading-snug mt-0.5">All in one place</div>
+                    <div className="text-[9px] text-slate-300/80 leading-snug mt-0.5">All in one place</div>
                   </div>
                 </div>
               </div>
@@ -212,215 +194,52 @@ export function LandingPage() {
               <div className="relative flex items-center justify-center flex-shrink-0">
 
                 {/* 3D Glowing Pedestal Base */}
-                <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-64 h-12 rounded-[100%] bg-gradient-to-b from-[#2098F2]/70 via-[#0A4BA3]/30 to-transparent border border-sky-400/50 blur-[1px] shadow-[0_0_50px_rgba(32,152,242,0.8)] pointer-events-none" />
+                <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 w-60 h-12 rounded-[100%] bg-gradient-to-b from-[#2098F2]/70 via-[#0A4BA3]/30 to-transparent border border-sky-400/50 blur-[1px] shadow-[0_0_50px_rgba(32,152,242,0.8)] pointer-events-none" />
 
                 {/* Smartphone Device Frame */}
-                <div className="relative w-[265px] xl:w-[285px] h-[510px] xl:h-[540px] rounded-[38px] bg-slate-950 p-2 border-[2.5px] border-slate-700 shadow-[0_30px_80px_rgba(0,0,0,0.95),0_0_40px_rgba(32,152,242,0.25)] ring-1 ring-white/20 z-20 flex flex-col overflow-hidden">
+                <div className="relative w-[250px] xl:w-[270px] h-[495px] xl:h-[535px] rounded-[38px] bg-slate-950 p-2 border-[2.5px] border-slate-700 shadow-[0_30px_80px_rgba(0,0,0,0.95),0_0_40px_rgba(32,152,242,0.3)] ring-1 ring-white/20 z-20 flex flex-col overflow-hidden">
 
-                  {/* Inner Screen Bezel */}
-                  <div className="w-full h-full rounded-[30px] bg-[#071324] border border-white/10 flex flex-col overflow-hidden relative text-white">
+                  {/* Inner Screen Bezel with Real Prescriptime Mobile Dashboard (Image 3) */}
+                  <div className="w-full h-full rounded-[30px] bg-slate-900 border border-white/10 overflow-hidden relative">
+                    <Image
+                      src="/images/app-mobile-screen.png"
+                      alt="Prescriptime Mobile Dashboard UI"
+                      fill
+                      priority
+                      quality={95}
+                      className="object-cover object-top"
+                      sizes="(max-width: 768px) 100vw, 300px"
+                    />
 
-                    {/* Top Status Bar with Dynamic Island */}
-                    <div className="w-full px-4 pt-2 pb-0.5 flex items-center justify-between text-[10px] text-slate-300 z-10 flex-shrink-0">
-                      <span className="font-semibold">9:41</span>
-                      <div className="w-16 h-3.5 bg-black rounded-full mx-auto flex items-center justify-center gap-1 px-1.5">
-                        <div className="w-1.5 h-1.5 rounded-full bg-slate-800" />
-                        <div className="w-1 h-1 rounded-full bg-blue-500/60" />
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Wifi className="w-2.5 h-2.5" />
-                        <Battery className="w-3 h-3" />
-                      </div>
-                    </div>
-
-                    {/* In-App Header */}
-                    <div className="px-3 py-1 flex items-center justify-between flex-shrink-0">
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-4 h-4 rounded bg-[#2098F2] flex items-center justify-center shadow-sm p-0.5">
-                          <div className="w-2 h-1 rounded-full border border-white -rotate-45" />
-                        </div>
-                        <span className="text-[11px] font-black tracking-tight">Prescriptime</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <div className="w-4.5 h-4.5 rounded-full bg-white/10 flex items-center justify-center relative">
-                          <Bell className="w-2.5 h-2.5 text-slate-300" />
-                          <span className="absolute top-0 right-0 w-1 h-1 bg-[#2098F2] rounded-full" />
-                        </div>
-                        <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-500 border border-white/30 flex items-center justify-center text-[8px] font-bold">
-                          SK
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* In-App Greeting */}
-                    <div className="px-3 pt-0.5 flex-shrink-0">
-                      <div className="text-[11px] font-bold text-white leading-tight">Good Morning,</div>
-                      <div className="text-[8.5px] text-sky-300/80">Stay on track, stay healthy!</div>
-                    </div>
-
-                    {/* Calendar Strip */}
-                    <div className="px-3 py-1 grid grid-cols-5 gap-1 flex-shrink-0">
-                      {[
-                        { day: 'Mon', date: '15' },
-                        { day: 'Tue', date: '16' },
-                        { day: 'Wed', date: '17', active: true },
-                        { day: 'Thu', date: '18' },
-                        { day: 'Fri', date: '19' },
-                      ].map((item) => (
-                        <div
-                          key={item.day}
-                          className={`rounded-lg py-0.5 text-center flex flex-col items-center transition-all ${
-                            item.active
-                              ? 'bg-[#2098F2] text-white shadow-md shadow-blue-500/40'
-                              : 'bg-white/5 text-slate-400'
-                          }`}
-                        >
-                          <span className="text-[7.5px] font-medium">{item.day}</span>
-                          <span className="text-[9.5px] font-bold leading-tight">{item.date}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Card: Today's Medicines with Radial Progress */}
-                    <div className="mx-3 p-1.5 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-between flex-shrink-0">
-                      <div>
-                        <div className="text-[9.5px] font-bold text-white">Today&apos;s Medicines</div>
-                        <div className="text-[8.5px] text-emerald-400 flex items-center gap-1 mt-0.5">
-                          <Check className="w-2 h-2" />
-                          <span>3/4 taken</span>
-                        </div>
-                      </div>
-                      <div className="relative w-7 h-7 flex items-center justify-center">
-                        <svg className="w-7 h-7 transform -rotate-90" viewBox="0 0 36 36">
-                          <path
-                            className="text-white/10"
-                            strokeWidth="3.5"
-                            stroke="currentColor"
-                            fill="none"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                          />
-                          <path
-                            className="text-[#2098F2]"
-                            strokeDasharray="75, 100"
-                            strokeWidth="3.5"
-                            strokeLinecap="round"
-                            stroke="currentColor"
-                            fill="none"
-                            d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                          />
-                        </svg>
-                        <span className="absolute text-[8px] font-extrabold text-white">75%</span>
-                      </div>
-                    </div>
-
-                    {/* Medicines List */}
-                    <div className="px-3 py-1 flex-1 flex flex-col gap-1 overflow-hidden">
-                      {/* Med 1 */}
-                      <div className="px-2 py-1 rounded-lg bg-white/[0.04] border border-white/5 flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-4.5 h-4.5 rounded-md bg-blue-500/20 text-[#2098F2] flex items-center justify-center">
-                            <Pill className="w-2.5 h-2.5" />
-                          </div>
-                          <div>
-                            <div className="text-[9px] font-bold text-white leading-tight">Paracetamol 500mg</div>
-                            <div className="text-[7.5px] text-slate-400">1 tablet • 8:00 AM</div>
-                          </div>
-                        </div>
-                        <div className="w-3 h-3 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                          <Check className="w-2 h-2" />
-                        </div>
-                      </div>
-
-                      {/* Med 2 */}
-                      <div className="px-2 py-1 rounded-lg bg-white/[0.04] border border-white/5 flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-4.5 h-4.5 rounded-md bg-rose-500/20 text-rose-400 flex items-center justify-center">
-                            <Pill className="w-2.5 h-2.5" />
-                          </div>
-                          <div>
-                            <div className="text-[9px] font-bold text-white leading-tight">Amlodipine 5mg</div>
-                            <div className="text-[7.5px] text-slate-400">1 tablet • 2:00 PM</div>
-                          </div>
-                        </div>
-                        <div className="w-3 h-3 rounded-full border border-slate-600" />
-                      </div>
-
-                      {/* Med 3 */}
-                      <div className="px-2 py-1 rounded-lg bg-white/[0.04] border border-white/5 flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-4.5 h-4.5 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                            <Pill className="w-2.5 h-2.5" />
-                          </div>
-                          <div>
-                            <div className="text-[9px] font-bold text-white leading-tight">Metformin 500mg</div>
-                            <div className="text-[7.5px] text-slate-400">1 tablet • 8:00 PM</div>
-                          </div>
-                        </div>
-                        <div className="w-3 h-3 rounded-full border border-slate-600" />
-                      </div>
-
-                      {/* Next Follow-Up Banner */}
-                      <div className="px-2 py-1 rounded-lg bg-sky-950/40 border border-sky-500/20 flex items-center justify-between mt-auto">
-                        <div className="flex items-center gap-1.5">
-                          <Calendar className="w-2.5 h-2.5 text-[#2098F2]" />
-                          <div>
-                            <div className="text-[7px] font-bold text-sky-300 uppercase tracking-wider">Next Follow-Up</div>
-                            <div className="text-[8px] text-white">12 Oct 2026 • Dr. S. Kumar</div>
-                          </div>
-                        </div>
-                        <ChevronRight className="w-2.5 h-2.5 text-slate-400" />
-                      </div>
-                    </div>
-
-                    {/* App Bottom Tab Bar */}
-                    <div className="w-full px-2.5 py-1 bg-[#050E1A] border-t border-white/10 flex items-center justify-between text-[7.5px] text-slate-400 flex-shrink-0">
-                      <div className="flex flex-col items-center text-[#2098F2]">
-                        <Home className="w-2.5 h-2.5" />
-                        <span className="text-[7px] mt-0.5">Home</span>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <FileText className="w-2.5 h-2.5" />
-                        <span className="text-[7px] mt-0.5">Records</span>
-                      </div>
-                      <div className="-mt-2.5 w-6 h-6 rounded-full bg-gradient-to-tr from-[#2098F2] to-sky-400 text-white flex items-center justify-center shadow-lg shadow-blue-500/50">
-                        <Camera className="w-3 h-3" />
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <Clock className="w-2.5 h-2.5" />
-                        <span className="text-[7px] mt-0.5">Reminders</span>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <MoreHorizontal className="w-2.5 h-2.5" />
-                        <span className="text-[7px] mt-0.5">More</span>
-                      </div>
-                    </div>
-
+                    {/* Subtle glossy glass sheen over the screen */}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.06] to-transparent pointer-events-none" />
                   </div>
+
                 </div>
 
               </div>
 
               {/* ── RIGHT FLOATING CARDS COLUMN ── */}
-              <div className="flex flex-col justify-between gap-24 z-30 flex-shrink-0 -ml-2">
+              <div className="flex flex-col justify-between gap-24 z-30 flex-shrink-0">
                 {/* Card 3: Smart Reminders */}
-                <div className="w-36 xl:w-40 p-2.5 rounded-2xl bg-[#091B33]/90 border border-sky-400/50 backdrop-blur-xl shadow-[0_12px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(32,152,242,0.4)] flex flex-col gap-1.5 transform hover:-translate-y-1 transition-transform">
+                <div className="w-34 xl:w-38 p-2.5 rounded-2xl bg-[#091B33]/90 border border-sky-400/50 backdrop-blur-xl shadow-[0_12px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(32,152,242,0.4)] flex flex-col gap-1.5 transform hover:-translate-y-1 transition-transform">
                   <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-[#2098F2] to-[#0A4BA3] flex items-center justify-center text-white shadow-md shadow-blue-500/40">
                     <Bell className="w-3.5 h-3.5" />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-white leading-tight">Smart Reminders</div>
-                    <div className="text-[9.5px] text-slate-300/80 leading-snug mt-0.5">Never miss a dose</div>
+                    <div className="text-[9px] text-slate-300/80 leading-snug mt-0.5">Never miss a dose</div>
                   </div>
                 </div>
 
                 {/* Card 4: Track Progress */}
-                <div className="w-36 xl:w-40 p-2.5 rounded-2xl bg-[#091B33]/90 border border-sky-400/50 backdrop-blur-xl shadow-[0_12px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(32,152,242,0.4)] flex flex-col gap-1.5 transform hover:-translate-y-1 transition-transform">
+                <div className="w-34 xl:w-38 p-2.5 rounded-2xl bg-[#091B33]/90 border border-sky-400/50 backdrop-blur-xl shadow-[0_12px_30px_rgba(0,0,0,0.7),0_0_20px_rgba(32,152,242,0.4)] flex flex-col gap-1.5 transform hover:-translate-y-1 transition-transform">
                   <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-[#2098F2] to-[#0A4BA3] flex items-center justify-center text-white shadow-md shadow-blue-500/40">
                     <BarChart2 className="w-3.5 h-3.5" />
                   </div>
                   <div>
                     <div className="text-xs font-bold text-white leading-tight">Track Progress</div>
-                    <div className="text-[9.5px] text-slate-300/80 leading-snug mt-0.5">Stay healthier, longer</div>
+                    <div className="text-[9px] text-slate-300/80 leading-snug mt-0.5">Stay healthier, longer</div>
                   </div>
                 </div>
               </div>
@@ -428,11 +247,21 @@ export function LandingPage() {
             </div>
           </div>
 
+          {/* ════ RIGHT ZONE: UNOBSTRUCTED FAMILY VIEW WITH SCRIPT ACCENT (~220-270px width) ════ */}
+          <div className="hidden lg:flex w-[210px] xl:w-[260px] h-full flex-col justify-center items-end pr-2 xl:pr-4 pointer-events-none z-10 flex-shrink-0">
+            <div className="transform -rotate-3 text-right">
+              <span className="font-serif italic text-amber-100/95 text-xl xl:text-2xl leading-relaxed tracking-wide drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] block font-normal whitespace-nowrap">
+                Care Today <br />
+                for Brighter Tomorrows
+              </span>
+            </div>
+          </div>
+
         </div>
       </main>
 
       {/* ── BOTTOM VALUE RIBBON (4 Columns) ── */}
-      <section className="relative z-20 w-full px-6 sm:px-10 lg:px-16 pb-2 sm:pb-3 flex-shrink-0">
+      <section className="relative z-20 w-full px-6 sm:px-10 lg:px-14 xl:px-16 pb-2 sm:pb-3 flex-shrink-0">
         <div className="rounded-2xl bg-[#071326]/80 border border-white/10 backdrop-blur-xl px-5 sm:px-8 py-3 sm:py-3.5">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full">
             {[
@@ -456,7 +285,7 @@ export function LandingPage() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="relative z-20 w-full px-6 sm:px-10 lg:px-16 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400 flex-shrink-0">
+      <footer className="relative z-20 w-full px-6 sm:px-10 lg:px-14 xl:px-16 py-2.5 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400 flex-shrink-0">
         <div className="flex items-center gap-2 font-mono">
           <span className="font-extrabold tracking-widest text-[#2098F2]">PRESCRIPTIME</span>
           <span className="text-white/30 font-normal">|</span>

@@ -142,22 +142,19 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
         <div className="absolute inset-0 bg-[#0a1628]/50" />
       </div>
 
-      {/* ── MAIN 2-COLUMN LAYOUT ── */}
-      <div className="relative z-10 w-full max-w-[1300px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 items-center min-h-screen lg:min-h-0 py-10 lg:py-0">
+      {/* ── CENTERED LOGIN CARD ── */}
+      <div className="relative z-10 w-full max-w-[440px] mx-auto flex items-center justify-center py-6 sm:py-10">
+        <div className="w-full bg-white/95 backdrop-blur-2xl rounded-[28px] p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border border-white/70 flex flex-col gap-5">
 
-        {/* LEFT COLUMN: Frosted glass login card */}
-        <div className="flex justify-center lg:justify-start">
-          <div className="w-full max-w-[430px] bg-white/95 backdrop-blur-2xl rounded-[28px] p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border border-white/70 flex flex-col gap-5">
-
-            {/* Card Top: Logo + Product Overview */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#2098F2] to-[#0F58B6] flex items-center justify-center shadow-md">
-                  <div className="w-4 h-2.5 rounded-full border border-white transform -rotate-45 flex overflow-hidden">
-                    <div className="w-1/2 h-full bg-[#2098F2]" />
-                    <div className="w-1/2 h-full bg-white" />
-                  </div>
+          {/* Card Top: Logo + Product Overview */}
+          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#2098F2] to-[#0F58B6] flex items-center justify-center shadow-md">
+                <div className="w-4 h-2.5 rounded-full border border-white transform -rotate-45 flex overflow-hidden">
+                  <div className="w-1/2 h-full bg-[#2098F2]" />
+                  <div className="w-1/2 h-full bg-white" />
                 </div>
+              </div>
                 <div>
                   <div className="text-base font-black text-slate-900 tracking-tight leading-none">Prescriptime</div>
                   <div className="text-[9px] uppercase font-extrabold tracking-wider text-slate-400 mt-0.5">Digital Prescription Organizer</div>
@@ -298,6 +295,5 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
         </div>
 
       </div>
-    </div>
   );
 }
