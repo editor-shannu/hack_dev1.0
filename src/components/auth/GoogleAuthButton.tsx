@@ -1,0 +1,161 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { LogOut, User as UserIcon, Loader2, Sparkles, ShieldAlert, Settings } from 'lucide-react';
+
+interface GoogleAuthButtonProps {
+  onOpenEMR?: () => void;
+  onOpenSettings?: () => void;
+}
+
+export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ onOpenEMR, onOpenSettings }) => {
+  const { user, loading, signInWithGoogle, signOutUser, isDemo } = useAuth();
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleSignIn = async () => {
+    setIsSigningIn(true);
+    try {
+      await signInWithGoogle();
+    } catch (err: any) {
+      if (err.code !== 'auth/popup-closed-by-user') {
+        console.error('Google Sign-In failed:', err);
+      }
+    } finally {
+      setIsSigningIn(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+      setIsMenuOpen(false);
+    } catch (err) {
+      console.error('Sign-Out failed:', err);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="h-9 w-24 rounded-xl bg-slate-100 border border-slate-200 animate-pulse" />
+    );
+  }
+
+  if (!user) {
+    return (
+      <button
+        onClick={handleSignIn}
+        disabled={isSigningIn}
+        id="header-google-signin-btn"
+        className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-300 shadow-sm active:scale-95 transition-all disabled:opacity-50"
+      >
+        {isSigningIn ? (
+          <Loader2 className="w-3.5 h-3.5 animate-spin text-[#0F58B6]" />
+        ) : (
+          <svg className="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24">
+            <path
+              fill="#4285F4"
+              d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            />
+            <path
+              fill="#34A853"
+              d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+            />
+            <path
+              fill="#FBBC05"
+              d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+            />
+            <path
+              fill="#EA4335"
+              d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+            />
+          </svg>
+        )}
+        <span>Sign in</span>
+      </button>
+    );
+  }
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        id="user-profile-menu-btn"
+        className="flex items-center gap-2 p-1 pl-2 pr-2.5 rounded-xl bg-white hover:bg-slate-50 dark:bg-slate-800 dark:hover:bg-slate-750 border border-slate-200 dark:border-slate-700 shadow-sm transition-all text-left"
+      >
+        {user.photoURL ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={user.photoURL}
+            alt={user.displayName || 'User'}
+            className="w-6 h-6 rounded-full object-cover border border-blue-400"
+          />
+        ) : (
+          <div className="w-6 h-6 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 flex items-center justify-center text-[#0F58B6] dark:text-blue-400">
+            {isDemo ? <Sparkles className="w-3 h-3" /> : <UserIcon className="w-3.5 h-3.5" />}
+          </div>
+        )}
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs font-semibold text-slate-800 dark:text-slate-200 max-w-[100px] truncate hidden md:inline">
+            {user.displayName?.split(' ')[0] || 'Patient'}
+          </span>
+          {isDemo && (
+            <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 font-mono font-bold">
+              DEMO
+            </span>
+          )}
+        </div>
+      </button>
+
+      {/* User Dropdown Menu */}
+      {isMenuOpen && (
+        <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white dark:bg-slate-850 border border-slate-200 dark:border-slate-750 shadow-2xl p-2 z-50 animate-in fade-in duration-150">
+          <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-750">
+            <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+              {user.displayName || 'Signed in user'}
+            </p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate font-mono mt-0.5">
+              {user.email}
+            </p>
+          </div>
+
+          <button
+            onClick={() => {
+              setIsMenuOpen(false);
+              if (onOpenEMR) onOpenEMR();
+            }}
+            id="user-emr-profile-btn"
+            className="w-full flex items-center gap-2 px-3 py-2 mt-1 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left"
+          >
+            <ShieldAlert className="w-3.5 h-3.5 text-rose-500" />
+            <span>Emergency Info (EMR)</span>
+          </button>
+
+          {onOpenSettings && (
+            <button
+              onClick={() => {
+                setIsMenuOpen(false);
+                onOpenSettings();
+              }}
+              id="user-settings-btn"
+              className="w-full flex items-center gap-2 px-3 py-2 mt-1 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left"
+            >
+              <Settings className="w-3.5 h-3.5 text-[#0F58B6] dark:text-blue-400" />
+              <span>Settings &amp; Preferences</span>
+            </button>
+          )}
+
+          <button
+            onClick={handleSignOut}
+            id="user-signout-btn"
+            className="w-full flex items-center gap-2 px-3 py-2 mt-1 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
