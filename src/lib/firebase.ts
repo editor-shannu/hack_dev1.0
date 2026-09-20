@@ -23,12 +23,12 @@ export const isFirebaseConfigured = Boolean(
 // Fallback configuration for SSR / static build prerendering when environment variables are omitted
 const firebaseConfig = {
   apiKey: isFirebaseConfigured ? rawApiKey : 'AIzaSyBuildPrerenderFallbackOnly_ReplaceInEnv',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'prescriptime.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'prescriptime',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'prescriptime.firebasestorage.app',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '717946712704',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:717946712704:web:build-fallback',
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || 'G-BUILD',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || '',
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || '',
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || '',
 };
 
 // Initialize Firebase safely for SSR / Next.js

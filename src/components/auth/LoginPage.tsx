@@ -80,8 +80,10 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
         setError('An account already exists with this email. Please sign in instead.');
       } else if (code === 'auth/weak-password') {
         setError('Password should be at least 6 characters.');
+      } else if (code === 'auth/internal-error' || code === 'auth/network-request-failed') {
+        setError('A network error occurred. Please check your connection and try again.');
       } else {
-        setError(err?.message || 'Authentication failed. Please check credentials or sign in with Google.');
+        setError('Authentication failed. Please check your credentials or sign in with Google.');
       }
       setIsLoading(false);
     }
@@ -96,8 +98,17 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
         window.location.href = '/';
       }
     } catch (err: any) {
-      if (err?.code !== 'auth/popup-closed-by-user') {
-        setError(err?.message || 'Google authentication failed. Please try again.');
+      const code = err?.code || '';
+      if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') {
+        // User closed the popup — silent, no error shown
+      } else if (code === 'auth/popup-blocked') {
+        setError('Popup was blocked by your browser. Please allow popups for this site and try again.');
+      } else if (code === 'auth/network-request-failed') {
+        setError('Network error. Please check your connection and try again.');
+      } else if (code === 'auth/internal-error' || code === 'auth/unknown') {
+        setError('Google Sign-In is temporarily unavailable. Please use email & password instead.');
+      } else {
+        setError('Google Sign-In failed. Please try again or use email & password.');
       }
       setIsLoading(false);
     }
@@ -222,7 +233,7 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
                 <input
                   type="text"
                   value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => { setUsername(e.target.value); setError(null); }}
                   placeholder="Username or email"
                   id="login-email-input"
                   className="w-full h-[44px] pl-10 pr-4 text-sm font-semibold text-slate-900 placeholder:text-slate-500 bg-slate-50 hover:bg-slate-100 focus:bg-white border border-slate-200 focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 focus:outline-none rounded-xl transition-all duration-200"
@@ -237,7 +248,7 @@ export function LoginPage({ onSwitchToLanding }: LoginPageProps) {
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => { setPassword(e.target.value); setError(null); }}
                   placeholder="Password"
                   id="login-password-input"
                   className="w-full h-[44px] pl-10 pr-10 text-sm font-semibold text-slate-900 placeholder:text-slate-500 bg-slate-50 hover:bg-slate-100 focus:bg-white border border-slate-200 focus:border-[#1877F2] focus:ring-2 focus:ring-[#1877F2]/20 focus:outline-none rounded-xl transition-all duration-200"
